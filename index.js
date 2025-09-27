@@ -10,6 +10,10 @@ app.use(express.static("public"));
 app.set("views", "./views");
 app.set("view engine", "pug");
 
+
+// App locals vairables
+const systemConfig = require("./config/system");
+app.locals.prefixAdmin = systemConfig.prefixAdmin;
 //Routes init
 adminRoute(app);
 route(app);
