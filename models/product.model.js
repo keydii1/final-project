@@ -1,9 +1,14 @@
 const mongoose = require("mongoose");
 const productSchema = new mongoose.Schema({
-    name: String,
-    price: Number,
+    title: String,
     description: String,
-    imageUrl: String
-},{ collection: "Products" });
+    price:Number,
+    discountPercentage: Number,
+    stock: Number,
+    thumnail: String,
+    status: String,
+    position: Number,
+    deleted: Boolean
+},{ collection: "products" });
 const Product = mongoose.model("Product", productSchema);
 module.exports = Product;
