@@ -21,9 +21,9 @@ block main
             td
                 img(src=item.thumbnail, alt="Sản phẩm 1", width="100", height="auto")
             td Sản phẩm #{index + 1}
-            td item.price +'$'
+            td #{item.price}$
             td
-                a(href="#", class="badge badge-success") item.status
+                a(href="#", class="badge badge-success") #{item.status}
             td
                 button(class="btn btn-warning btn-sm") Sửa
                 button(class="btn btn-danger btn-sm ml-1") Xoá
