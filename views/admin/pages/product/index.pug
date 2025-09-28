@@ -6,6 +6,18 @@ block main
 
     // Bộ lọc và Tìm kiếm
     .mb-3
+  form(id="form-search")
+    .input-group
+      input(
+        type="text" 
+        placeholder="Nhập từ khóa" 
+        name="keyword" 
+        class="form-control"
+      )
+      .input-group-append
+        button.btn.btn-success(type="submit") Tìm
+
+
   each item in fillterStatus
       button(type="button" button-status=item.status class=item.class) #{item.name}
 
