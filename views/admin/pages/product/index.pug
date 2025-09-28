@@ -1,10 +1,17 @@
 extends ../../layouts/default.pug
 
-
 block main
-    .container.mt-4
+  .container.mt-4
     h2.mb-4 Danh sách sản phẩm
-    table.table.table-bordered.table-striped
+
+    // Bộ lọc và Tìm kiếm
+    .mb-3
+  each item in fillterStatus
+      button(type="button" button-status=item.status class=item.class) #{item.name}
+
+  
+
+  table.table.table-bordered.table-striped
       thead
         tr
           th STT
@@ -14,17 +21,18 @@ block main
           th Trạng thái
           th Hành động
       tbody
-        //- Product 1
         each item, index in products
-            tr
+          tr
             td #{index + 1}
             td
-                img(src=item.thumbnail, alt="Sản phẩm 1", width="100", height="auto")
+              img(src=item.thumbnail, alt="Sản phẩm", width="100", height="auto")
             td Sản phẩm #{index + 1}
             td #{item.price}$
             td
-                a(href="#", class="badge badge-success") #{item.status}
+              if item.status == 'Hoạt động'
+                span.badge.badge-success #{item.status}
+              else
+                span.badge.badge-secondary #{item.status}
             td
-                button(class="btn btn-warning btn-sm") Sửa
-                button(class="btn btn-danger btn-sm ml-1") Xoá
-
+              button.btn.btn-warning.btn-sm Sửa
+              button.btn.btn-danger.btn-sm.ml-1 Xoá
