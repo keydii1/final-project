@@ -32,6 +32,8 @@ if(formSearch){
         }else {
             url.searchParams.delete("keyword");
         }
+        window.location.href = url.href;
     });
+    
 }  
 // end of form search

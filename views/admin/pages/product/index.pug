@@ -1,4 +1,6 @@
 extends ../../layouts/default.pug
+include ../../mixins/fillerStatus.pug
+include ../../mixins/search.pug
 
 block main
   .container.mt-4
@@ -6,24 +8,12 @@ block main
 
     // Bộ lọc và Tìm kiếm
     .mb-3
-  form(id="form-search")
-    .input-group
-      input(
-        type="text" 
-        placeholder="Nhập từ khóa" 
-        name="keyword" 
-        class="form-control"
-      )
-      .input-group-append
-        button.btn.btn-success(type="submit") Tìm
+      +search(keyword)
 
+    +fillerStatus(fillterStatus)
 
-  each item in fillterStatus
-      button(type="button" button-status=item.status class=item.class) #{item.name}
-
-  
-
-  table.table.table-bordered.table-striped
+    // Bảng danh sách sản phẩm
+    table.table.table-bordered.table-striped
       thead
         tr
           th STT
@@ -38,7 +28,7 @@ block main
             td #{index + 1}
             td
               img(src=item.thumbnail, alt="Sản phẩm", width="100", height="auto")
-            td Sản phẩm #{index + 1}
+            td #{item.title}
             td #{item.price}$
             td
               if item.status == 'Hoạt động'
@@ -48,3 +38,20 @@ block main
             td
               button.btn.btn-warning.btn-sm Sửa
               button.btn.btn-danger.btn-sm.ml-1 Xoá
+
+    // Pagination
+    
+    
+    div #{pagination.totalPages}
+    nav
+      ul.pagination
+        li.page-item
+          button.page-link Trang trước
+        li.page-item
+          button.page-link 1
+        li.page-item.active
+          button.page-link 2
+        li.page-item
+          button.page-link 3
+        li.page-item
+          button.page-link Kế tiếp
