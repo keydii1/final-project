@@ -40,18 +40,26 @@ block main
               button.btn.btn-danger.btn-sm.ml-1 Xoá
 
     // Pagination
-    
-    
-    div #{pagination.totalPages}
-    nav
-      ul.pagination
-        li.page-item
-          button.page-link Trang trước
-        li.page-item
-          button.page-link 1
-        li.page-item.active
-          button.page-link 2
-        li.page-item
-          button.page-link 3
-        li.page-item
-          button.page-link Kế tiếp
+    if pagination.totalPages > 1
+      nav
+        ul.pagination
+          // Previous button (chỉ hiện nếu không ở trang đầu)
+          if pagination.currentPage > 1
+            li.page-item
+              button.page-link(
+                button-pagination=pagination.currentPage - 1
+              ) Previous
+
+          // Page numbers
+          - for (var i = 1; i <= pagination.totalPages; i++)
+            li(class=`page-item ${i === pagination.currentPage ? "active" : ""}`)
+              button.page-link(
+                button-pagination=i
+              ) #{i}
+
+          // Next button (chỉ hiện nếu chưa ở trang cuối)
+          if pagination.currentPage < pagination.totalPages
+            li.page-item
+              button.page-link(
+                button-pagination=pagination.currentPage + 1
+              ) Next

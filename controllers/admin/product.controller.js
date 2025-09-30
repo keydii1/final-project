@@ -20,7 +20,7 @@ module.exports.product = async (req, res) => {
     }
     let objectPagination = {
         currentPage: 1,
-        limitItems: 5
+        limitItems: 2
     }
     if(req.query.page){
         objectPagination.currentPage = parseInt(req.query.page);

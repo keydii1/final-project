@@ -18,6 +18,7 @@ if(buttonStatus.length>0){
 }
 
 
+
 // form search
 const formSearch = document.querySelector(".form-search");
 if(formSearch){
@@ -37,3 +38,25 @@ if(formSearch){
     
 }  
 // end of form search
+
+
+
+// pagination
+const buttonPagination = document.querySelectorAll("[button-pagination]");
+if(buttonPagination.length>0){
+
+    let url = new URL (window.location.href);
+  buttonPagination.forEach((button)=>{
+    button.addEventListener("click", ()=>{
+        const page = button.getAttribute("button-pagination");
+        if(page){
+            url.searchParams.set("page", page);
+        }else {
+            url.searchParams.delete("page");
+        }
+        // Redirect to the new URL with the page parameter
+        window.location.href = url.href;
+    });
+});
+}
+// end of pagination
