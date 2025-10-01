@@ -1,0 +1,24 @@
+mixin paginationMixin(pagination)
+    if pagination.totalPages > 1
+      nav
+        ul.pagination
+          // Previous button (chỉ hiện nếu không ở trang đầu)
+          if pagination.currentPage > 1
+            li.page-item
+              button.page-link(
+                button-pagination=pagination.currentPage - 1
+              ) Previous
+
+          // Page numbers
+          - for (var i = 1; i <= pagination.totalPages; i++)
+            li(class=`page-item ${i === pagination.currentPage ? "active" : ""}`)
+              button.page-link(
+                button-pagination=i
+              ) #{i}
+
+          // Next button (chỉ hiện nếu chưa ở trang cuối)
+          if pagination.currentPage < pagination.totalPages
+            li.page-item
+              button.page-link(
+                button-pagination=pagination.currentPage + 1
+              ) Next

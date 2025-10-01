@@ -1,6 +1,7 @@
 extends ../../layouts/default.pug
 include ../../mixins/fillerStatus.pug
 include ../../mixins/search.pug
+include ../../mixins/pagination.pug
 
 block main
   .container.mt-4
@@ -11,6 +12,23 @@ block main
       +search(keyword)
 
     +fillerStatus(fillterStatus)
+
+    // Form thay đổi trạng thái
+    .d-flex.align-items-start
+      .form-group
+        select(name="type" class="form-control")
+          option(value="active") Hoạt động
+          option(value="inactive") Dừng hoạt động
+
+      .form-group
+        input(
+          type="text"
+          name="ids"
+          value=""
+          class="form-control"
+        )
+
+      button(type="submit" class="btn btn-primary") Áp dụng
 
     // Bảng danh sách sản phẩm
     table.table.table-bordered.table-striped
@@ -31,35 +49,35 @@ block main
             td #{item.title}
             td #{item.price}$
             td
-              if item.status == 'Hoạt động'
-                span.badge.badge-success #{item.status}
+              if item.status == 'active'
+                a(
+                  href="javascript:;"
+                  data-status="active"
+                  data-id=item.id
+                  button-change-status
+                  class="badge badge-success"
+                ) Hoạt động
               else
-                span.badge.badge-secondary #{item.status}
+                a(
+                  href="javascript:;"
+                  data-status="inactive"
+                  data-id=item.id
+                  button-change-status
+                  class="badge badge-danger"
+                ) Dừng hoạt động
             td
               button.btn.btn-warning.btn-sm Sửa
               button.btn.btn-danger.btn-sm.ml-1 Xoá
 
     // Pagination
-    if pagination.totalPages > 1
-      nav
-        ul.pagination
-          // Previous button (chỉ hiện nếu không ở trang đầu)
-          if pagination.currentPage > 1
-            li.page-item
-              button.page-link(
-                button-pagination=pagination.currentPage - 1
-              ) Previous
+    +paginationMixin(pagination)
 
-          // Page numbers
-          - for (var i = 1; i <= pagination.totalPages; i++)
-            li(class=`page-item ${i === pagination.currentPage ? "active" : ""}`)
-              button.page-link(
-                button-pagination=i
-              ) #{i}
+    // Form hidden để change status
+    form(
+      action=""
+      method="POST"
+      id="form-change-status"
+      data-path=`${prefixAdmin}/products/change-status`
+    )
 
-          // Next button (chỉ hiện nếu chưa ở trang cuối)
-          if pagination.currentPage < pagination.totalPages
-            li.page-item
-              button.page-link(
-                button-pagination=pagination.currentPage + 1
-              ) Next
+    script(src="/admin/js/products.js")
