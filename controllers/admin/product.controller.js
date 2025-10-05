@@ -2,6 +2,8 @@ const Product = require("../../models/product.model");
 const searchHelper = require("../../helpers/searchHelper");
 const fillterStatusHelper = require("../../helpers/fillterStatus");
 const paginationHelper = require("../../helpers/panigation");
+const router = require("../../routes/admin/products.route");
+const systemconfig = require("../../config/system.js");
 module.exports.index = async (req, res) => {
     const fillterStatus = fillterStatusHelper(req.query.status);
 
@@ -106,3 +108,23 @@ module.exports.deleteItem = async(req,res) => {
 // end of delete item
 
 // change position
+
+module.exports.create = async(req,res) => {
+res.render("admin/pages/product/create.pug", {
+    pageTitle: "Create New Product"
+});
+}
+module.exports.createPost = async(req,res) => {
+    req.body.price = parseFloat(req.body.price) || 0;
+    req.body.stock = parseInt(req.body.stock) || 0;
+    req.body.discountPercentage = parseFloat(req.body.discountPercentage) || 0;
+    if(req.body.position===""){
+        let countProducts = await Product.countDocuments(Product.find({deleted: false}));
+        countProducts +=1;
+        req.body.position = countProducts;
+    }
+    else{ req.body.position = parseInt(req.body.position) || 0;}
+    const newProduct = new Product(req.body);
+    await newProduct.save();
+    res.redirect(`${systemconfig.prefixAdmin}/products`);
+}
