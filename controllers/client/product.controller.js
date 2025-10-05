@@ -4,7 +4,8 @@ module.exports.product =  async(req, res) => {
     const products = await Product.find({
         status: "active",// to check active products only
         deleted: false // to check not deleted products
-    });
+    })
+        .sort({position: "asc"});
         console.log(products);   
         console.log("here is products page");
         res.render("client/pages/products/index.pug", {

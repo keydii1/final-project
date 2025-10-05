@@ -16,10 +16,8 @@ module.exports = (query) => {
             name: "Dừng hoạt động",
             status :"inactive",
             class:""
-
         },
     ];
-
     if(query === 'active') {
         fillterStatus[1].class = "btn btn-success";
         fillterStatus[0].class = "";
@@ -29,3 +27,4 @@ module.exports = (query) => {
     }
     return fillterStatus;
 }
+

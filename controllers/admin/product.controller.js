@@ -8,10 +8,13 @@ module.exports.index = async (req, res) => {
     let findCondition = {
         deleted: false, // to check not deleted products
     };
-
+    
     let searchObject = searchHelper(req);
+
+
     let keyword = "";
     if(searchObject !== null) {
+        // assign regex variabl to title to find the title that same with this title
         findCondition.title = searchObject.regex;
         keyword = searchObject.keyword;
     }
@@ -19,13 +22,17 @@ module.exports.index = async (req, res) => {
     if(req.query.status){
         findCondition.status = req.query.status;
     }
+
     const countProducts = await Product.countDocuments(Product.find(findCondition));
+    
 
     let objectPagination = paginationHelper({
-        currentPage: 1, limitItems: 2
+        currentPage: 1, limitItems: 3
     }, req,countProducts);
-    const products = await Product.find(findCondition).limit(objectPagination.limitItems).skip(objectPagination.skip);
-
+    const products = await Product.find(findCondition)
+    .sort({position: "asc"})
+    .limit(objectPagination.limitItems)
+    .skip(objectPagination.skip);
     // console.log(products);
     res.render("admin/pages/product/index.pug", {
         pageTitle: "Admin Product Page",
@@ -34,15 +41,64 @@ module.exports.index = async (req, res) => {
         keyword: keyword,
         pagination: objectPagination
     });
-}
+}   
 
 module.exports.changeStatus = async(req,res) => {
+    // this params usually combine with patch method
      const status = req.params.status;
+     console.log(status);
       const id = req.params.id;
       await Product.updateOne({ _id: id } , { status: status});
         const backURL = req.header('Referer') || '/admin/products';
         res.redirect(backURL);
-
-
-
 }
+module.exports.changeMulti = async(req,res) => {
+    const type = req.body.type;
+    const ids = req.body.ids. split(","); 
+
+    console.log(type);
+    console.log(ids);
+    switch(type){
+        case "active":
+            // function to change status to active in mongoose
+            await Product.updateMany({_id: {$in: ids}}, {status: "active"});
+            break;
+        case "inactive":
+            await Product.updateMany({_id: {$in: ids}}, {status: "inactive"});
+            break;
+        case "selected-delete":
+            // soft delete 
+            await Product.updateMany({_id: {$in: ids}}, {deleted: true,
+                deletedAt: new Date()
+            });
+            break;
+        case "change-position":
+            for(const item of ids){
+                const parts = item.split(":");
+                const id = parts[0];
+                const position = parseInt(parts[1]) || 0;
+                await Product.updateOne({_id: id}, {position: position});
+            }
+            break;
+        default:
+            break;;
+    }
+        const backURL = req.header('Referer') || '/admin/products';
+        res.redirect(backURL);
+}
+
+// delete item
+module.exports.deleteItem = async(req,res) => {
+    const id = req.params.id;
+    // hard delete
+    // await Product.deleteOne({_id: id});
+    // sofft delete
+     await Product.updateOne({_id: id}, {deleted: true,
+        deletedAt: new Date()
+     });
+    const backURL = req.header('Referer') || '/admin/products';
+    res.redirect(backURL);
+}
+// end of delete item
+
+// change position
