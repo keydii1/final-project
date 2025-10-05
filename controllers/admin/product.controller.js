@@ -49,28 +49,30 @@ module.exports.changeStatus = async(req,res) => {
      console.log(status);
       const id = req.params.id;
       await Product.updateOne({ _id: id } , { status: status});
+    req.flash('success', 'Updated successfully');
+
         const backURL = req.header('Referer') || '/admin/products';
         res.redirect(backURL);
 }
 module.exports.changeMulti = async(req,res) => {
     const type = req.body.type;
-    const ids = req.body.ids. split(","); 
-
-    console.log(type);
-    console.log(ids);
+    const ids = req.body.ids. split(","); // convert string to array
     switch(type){
         case "active":
             // function to change status to active in mongoose
             await Product.updateMany({_id: {$in: ids}}, {status: "active"});
+            req.flash('success', `Updated ${ids.length} item successfully`);
             break;
         case "inactive":
             await Product.updateMany({_id: {$in: ids}}, {status: "inactive"});
+            req.flash('success', `Updated ${ids.length} item successfully`);
             break;
         case "selected-delete":
             // soft delete 
             await Product.updateMany({_id: {$in: ids}}, {deleted: true,
                 deletedAt: new Date()
             });
+            req.flash('success', `Deleted ${ids.length} item successfully`);
             break;
         case "change-position":
             for(const item of ids){
@@ -79,10 +81,12 @@ module.exports.changeMulti = async(req,res) => {
                 const position = parseInt(parts[1]) || 0;
                 await Product.updateOne({_id: id}, {position: position});
             }
+            req.flash('success', `Changed position of ${ids.length} item successfully`);
             break;
         default:
             break;;
     }
+        
         const backURL = req.header('Referer') || '/admin/products';
         res.redirect(backURL);
 }

@@ -3,7 +3,9 @@ include ../../mixins/fillerStatus.pug
 include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
+include ../../mixins/alert.pug
 block main
+  +alert-success("2000")
   .container.mt-4
     h2.mb-4 Danh sách sản phẩm
 

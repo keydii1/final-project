@@ -140,3 +140,30 @@ if(buttonDelete.length > 0){
     }
 
 //  end delete items
+
+// show alert
+// show alert
+const showAlerts = document.querySelectorAll("[show-alert]");
+if (showAlerts.length > 0) {
+  showAlerts.forEach((alert) => {
+    const time = parseInt(alert.getAttribute("data-time")) || 3000;
+
+    // Auto hide sau thời gian
+    setTimeout(() => {
+      alert.classList.add("hiden-alert");
+    }, time);
+
+    // Nút đóng thủ công
+    const closeAlert = alert.querySelector("[close-alert]");
+    if (closeAlert) {
+      closeAlert.addEventListener("click", () => {
+        alert.classList.add("hiden-alert");
+      });
+    }
+  });
+}
+// end show alert
+
+
+// end show alert
+

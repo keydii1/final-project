@@ -1,3 +1,7 @@
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+var flash = require('express-flash');
+
 // import express into the Nodejs project
 const express = require("express");
 // express() is a function that create object aplication(web application)
@@ -28,6 +32,15 @@ const port = process.env.PORT;
 Khi bạn gửi dữ liệu từ <form> bằng POST, Express sẽ tự động phân tích (parse) dữ liệu đó và gắn vào req.body.
 */
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser('keyboard cat')); 
+
+app.use(session({
+  secret: 'keyboard cat',   // bắt buộc có secret
+  resave: false,            // khuyên nên để false
+  saveUninitialized: true,  // cho phép lưu session chưa khởi tạo
+  cookie: { maxAge: 60000 } // 60s
+}));
+app.use(flash());
 
 /*
  Đây là middleware để parse dữ liệu JSON từ request body.
