@@ -8,6 +8,7 @@ block main
     form(
       action=`${prefixAdmin}/products/create` 
       method="POST" 
+      enctype="multipart/form-data"
     )
       // Tiêu đề
       .form-group
@@ -15,7 +16,6 @@ block main
         input#title.form-control(
           type="text" 
           name="title" 
-          required 
           placeholder="Nhập tiêu đề sản phẩm"
         )
 
@@ -25,7 +25,6 @@ block main
         textarea#description.form-control(
           name="description" 
           rows="3" 
-          required 
           placeholder="Nhập mô tả sản phẩm"
         )
 
@@ -36,7 +35,6 @@ block main
           type="number" 
           step="0.01"
           name="price" 
-          required 
           placeholder="Nhập giá sản phẩm"
         )
 
@@ -47,7 +45,6 @@ block main
           type="number" 
           step="0.01"
           name="discountPercentage" 
-          required 
           placeholder="Nhập % giảm giá"
         )
 
@@ -57,7 +54,6 @@ block main
         input#stock.form-control(
           type="number" 
           name="stock" 
-          required 
           placeholder="Nhập số lượng sản phẩm trong kho"
         )
 
@@ -65,10 +61,11 @@ block main
       .form-group
         label(for="thumbnail") Hình ảnh (URL)
         input#thumbnail.form-control(
-          type="text" 
+          type="file" 
           name="thumbnail" 
           placeholder="Nhập link hình ảnh sản phẩm"
-          required
+          accept="image/*"
+          
         )
 
       // Vị trí
