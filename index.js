@@ -78,7 +78,7 @@ Code Node.js (file .js trong backend) không bao giờ bị lộ ra client (dù 
 Client chỉ thấy kết quả mà server gửi về (HTML, JSON, file tĩnh được cho phép).
 
  */
-app.use(express.static("public"));
+app.use(express.static(`${__dirname}/public`));
 /**
 🔹 1. app.set("views", "./views");
 
@@ -87,7 +87,7 @@ Nói cho Express biết thư mục chứa các file template (view).
 Ở đây là thư mục ./views (ngay trong project).
 
  */
-app.set("views", "./views");
+app.set("views", `${__dirname}/views`);
 /**
  * 2. app.set("view engine", "pug");
 
