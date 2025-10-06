@@ -4,29 +4,33 @@ include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
+include ../../mixins/sort.pug
+
 block main
   +alert-success("2000")
+
   .container.mt-4
     h2.mb-4 Danh sách sản phẩm
 
-    // Bộ lọc và Tìm kiếm
+    // --- Bộ lọc và Tìm kiếm ---
     .mb-3
       +search(keyword)
 
     +fillerStatus(fillterStatus)
-    .row 
-      .col-8 
+
+    .row.mb-3
+      .col-8
         +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
-      .col-4 
+      .col-4
         a(
-          href=`${prefixAdmin}/products/create` 
+          href=`${prefixAdmin}/products/create`
           class="btn btn-success float-right"
-          ) Thêm sản phẩm
-    // Bảng danh sách sản phẩm
-    table(
-       class="table table-bordered table-striped"
-       checkbox-multi
-    )
+        ) Thêm sản phẩm
+
+    // --- Sắp xếp ---
+    +sort()
+    // --- Bảng danh sách sản phẩm ---
+    table.table.table-bordered.table-striped(checkbox-multi)
       thead
         tr
           th
@@ -35,7 +39,7 @@ block main
           th Hình ảnh
           th Tiêu đề
           th Giá
-          th Vị trí 
+          th Vị trí
           th Trạng thái
           th Hành động
       tbody
@@ -43,28 +47,30 @@ block main
           tr
             td
               input(
-                type="checkbox" 
-                name="id" 
+                type="checkbox"
+                name="id"
                 value=item.id
               )
             td #{index + 1}
             td
-              img(src=item.thumbnail, alt="Sản phẩm", width="100", height="auto")
+              if item.thumbnail
+                img(src=item.thumbnail, alt="Sản phẩm", width="100", height="auto")
+              else
+                span.text-muted Không có ảnh
             td #{item.title}
             td #{item.price}$
-            td 
+            td
               input(
-                type="number" 
-                name="position" 
+                type="number"
+                name="position"
                 value=item.position
                 class="form-control"
-                style="width: 80px ;text-align: center"
+                style="width: 80px; text-align: center"
               )
             td
               if item.status == 'active'
                 a(
                   href="javascript:;"
-                  
                   data-status="active"
                   data-id=item.id
                   button-change-status
@@ -89,14 +95,14 @@ block main
               ) Sửa
               button(
                 class="btn btn-danger btn-sm ml-1"
-                data-id = item.id 
+                data-id=item.id
                 button-delete
-                ) Xoá
+              ) Xoá
 
-    // Pagination
+    // --- Phân trang ---
     +paginationMixin(pagination)
 
-    // Form hidden để change status
+    // --- Form ẩn ---
     form(
       action=""
       method="POST"

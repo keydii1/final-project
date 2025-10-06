@@ -1,0 +1,23 @@
+mixin sort()
+    div(
+      class="mb-3 d-flex align-items-center"
+      sort
+    )
+      select(
+        name="sort"
+        class="form-control"
+        sort-select
+        style="width: auto"
+      )
+        option(value="position_desc") Vị trí giảm dần
+        option(value="position_asc") Vị trí tăng dần
+        option(value="price_desc") Giá giảm dần
+        option(value="price_asc") Giá tăng dần
+        option(value="title_asc") Tiêu đề A → Z
+        option(value="title_desc") Tiêu đề Z → A
+      button(
+        class="ml-2 btn btn-secondary" 
+        id="btn-reset-sort"
+        sort-clear
+        type="button"
+      ) Đặt lại

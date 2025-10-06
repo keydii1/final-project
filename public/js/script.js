@@ -179,3 +179,39 @@ if (uploadImage) {
     }
   });
 }
+
+// sort
+const sort =document.querySelector("[sort]");
+if(sort){
+    let url = new URL(window.location.href);
+    const sortSelect = sort.querySelector("[sort-select]");
+    const sortClear = sort.querySelector("[sort-clear]");
+    
+    sortSelect.addEventListener("change", (e) => {
+        const value = e.target.value;
+        const [sortKey, sortValue] = value.split("_");
+        if(sortKey && sortValue){
+            url.searchParams.set("sortKey", sortKey);
+            url.searchParams.set("sortValue", sortValue);
+        }
+        window.location.href = url.href;
+});
+ // Khi bấm nút "Đặt lại"
+  if (sortClear) {
+    sortClear.addEventListener("click", () => {
+      url.searchParams.delete("sortKey");
+      url.searchParams.delete("sortValue");
+      window.location.href = url.href;
+    });
+  }
+
+  // ✅ Giữ lại lựa chọn sau khi reload trang
+  const currentSortKey = url.searchParams.get("sortKey");
+  const currentSortValue = url.searchParams.get("sortValue");
+  if (currentSortKey && currentSortValue) {
+    const currentValue = `${currentSortKey}_${currentSortValue}`;
+    sortSelect.value = currentValue;
+  }
+}
+// end of sort
+
