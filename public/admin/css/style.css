@@ -37,3 +37,15 @@
     border-radius: 50%;
     cursor: pointer;
 }
+.image-preview{
+    max-width: 150px;
+    max-height: 150px;
+    object-fit: contain;
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.image-preview[src=""]{
+    display: none;
+}
