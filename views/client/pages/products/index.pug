@@ -15,6 +15,7 @@ block main
               img(src=items.thumbnails, alt="Ảnh không hiển thị")
             .inner-content
               h3.inner-title= items.title
+                a(href=`/products/${items.slug}`) Xem chi tiết
               .inner-price-new= items.price + '$'
               .inner-price-old 100$
               .inner-discount= items.discountPercentage + '%'

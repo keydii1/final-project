@@ -22,6 +22,7 @@ const controller = require("../../controllers/admin/product.controller");
         validate.titleIsNotNull,
         // validate.tileNoLessThan8character,
         controller.editPatch);
+    router.get("/detail/:id", controller.detail);
 // Export router
 module.exports = router;
 

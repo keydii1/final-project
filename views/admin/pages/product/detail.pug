@@ -1,0 +1,60 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main 
+    +alert-success("2000")
+    .container.mt-4
+        h2.mb-4 Chi tiết sản phẩm
+        .card
+        .card-header
+            h3 #{product.title}
+        .card-body
+            // Hình ảnh sản phẩm
+            .mb-4
+            img(
+                src=`${product.thumbnail}` 
+                alt="Hình ảnh sản phẩm" 
+                width="200" 
+                height="auto"
+            )
+            // Mô tả sản phẩm
+            .mb-3
+            h5 Mô tả:
+            p #{product.description}
+            // Giá sản phẩm
+            .mb-3
+            h5 Giá:
+            p #{product.price}$
+            // Giảm giá %
+            .mb-3
+            h5 Giảm giá (%):
+            p #{product.discountPercentage}%
+            // Tồn kho
+            .mb-3
+            h5 Số lượng tồn kho:
+            p #{product.stock}
+            // Vị trí sắp xếp
+            .mb-3
+            h5 Vị trí sắp xếp:
+            p #{product.position}
+            // Trạng thái
+            .mb-3
+            h5 Trạng thái:
+            if product.status == 'active'
+                span(
+                class="badge badge-success"
+                ) Hoạt động
+            else
+                span(
+                 class="badge badge-danger"
+                ) Dừng hoạt động
+        .card-footer
+            a(
+            href=`${prefixAdmin}/products/edit/${product.id}` 
+            class="btn btn-warning"
+            ) Chỉnh sửa sản phẩm
+            a(
+            href=`${prefixAdmin}/products` 
+            class="btn btn-secondary ml-2"
+            ) Quay lại danh sách        
+    

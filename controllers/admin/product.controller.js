@@ -164,3 +164,16 @@ module.exports.editPatch = async(req,res) => {
     }
     res.redirect(`${systemconfig.prefixAdmin}/products`);
 }
+
+module.exports.detail = async(req,res) => {
+    console.log(req.params.id);
+    const findCondition = {
+        deleted: false,
+        _id: req.params.id
+    };
+    const product = await Product.findOne(findCondition);
+    res.render("admin/pages/product/detail.pug", {
+        pageTitle: "Product Detail Page",
+        product: product
+    });
+}

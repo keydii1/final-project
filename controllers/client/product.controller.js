@@ -12,4 +12,17 @@ module.exports.product =  async(req, res) => {
             pageTitle: "Products Page",
             products: products
         });
+}
+module.exports.productDetail = async(req, res) => {
+    const slug = req.params.slug;
+    const findCondition= {
+        slug: slug,
+        deleted: false,
+        status: "active"
     }
+    const product = await Product.findOne(findCondition);
+    res.render("client/pages/products/detail.pug", {
+        pageTitle:`${product.title} Detail Page`,
+        product: product
+    });
+}
