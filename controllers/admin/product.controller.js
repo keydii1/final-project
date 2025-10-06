@@ -129,3 +129,38 @@ module.exports.createPost = async(req,res) => {
     await newProduct.save();
     res.redirect(`${systemconfig.prefixAdmin}/products`);
 }
+
+module.exports.edit = async(req,res) => {
+    try{
+    console.log(req.params.id);
+    const findCondition = {
+        deleted: false,
+        _id: req.params.id
+    };
+    const product = await Product.findOne(findCondition);
+    console.log(product);
+    res.render("admin/pages/product/edit.pug", {
+    pageTitle: "Create New Product",
+    product: product
+});
+    }
+    catch(err){
+        res.redirect(`${systemconfig.prefixAdmin}/products`);
+    }
+}
+
+module.exports.editPatch = async(req,res) => {
+    req.body.price = parseFloat(req.body.price);
+    req.body.stock = parseInt(req.body.stock) ;
+    req.body.discountPercentage = parseFloat(req.body.discountPercentage);
+    req.body.position = parseInt(req.body.position) ;
+    if(req.file) req.body.thumbnail = `/uploads/${req.file.filename}`;
+    try{
+    await Product.updateOne({_id: req.params.id}, req.body);
+    req.flash('success', 'Updated successfully');
+    }
+    catch(err){
+        req.flash('error', JSON.stringify(err));
+    }
+    res.redirect(`${systemconfig.prefixAdmin}/products`);
+}

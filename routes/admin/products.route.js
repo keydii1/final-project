@@ -14,7 +14,14 @@ const controller = require("../../controllers/admin/product.controller");
         upload.single("thumbnail"),
         validate.titleIsNotNull,
         validate.tileNoLessThan8character,
-         controller.createPost);
+        controller.createPost
+        );
+    router.get("/edit/:id", controller.edit);
+    router.patch("/edit/:id",
+        upload.single("thumbnail"),
+        validate.titleIsNotNull,
+        // validate.tileNoLessThan8character,
+        controller.editPatch);
 // Export router
 module.exports = router;
 
