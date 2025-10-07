@@ -12,6 +12,7 @@ cloudinary.config({
 });
 // end cấu hình Cloudinary
 module.exports.uploadToCloud = (req, res, next) => {
+        console.log("req.file:", req.file);
         if(req.file){
         let streamUpload = (req) => {
             return new Promise((resolve, reject) => {
@@ -20,6 +21,7 @@ module.exports.uploadToCloud = (req, res, next) => {
                         if (result) {
                             resolve(result);
                         } else {
+                            console.log("Lỗi upload:", error);
                             reject(error);
                         }
                     }
@@ -31,16 +33,15 @@ module.exports.uploadToCloud = (req, res, next) => {
 
         async function upload(req) {
             let result = await streamUpload(req);
-            console.log(result);
+            console.log("Result từ Cloudinary:", result);
+            console.log("URL ảnh:", result.secure_url);
+
             req.body[req.file.fieldname] = result.secure_url;
             next();
-
         }
 
         upload(req);
         }else{
             next();
         }
-
-
     }
