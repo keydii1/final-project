@@ -49,3 +49,49 @@
 .image-preview[src=""]{
     display: none;
 }
+
+.sider-left {
+    background-color:rgb(145, 140, 140);
+    padding: 20px;
+    height: 100%;
+    font-size: 30px;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items:center;
+    justify-content: center;
+
+
+}
+.inner-menu ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+}
+
+.sider-left .inner-menu a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sider-left .inner-menu a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    text-decoration: none;
+}    
+.inner-body {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 300px 1fr;
+}
+.main {
+    padding: 20px;
+    background-color: rgb(248, 223, 223)    ;
+    min-height: 80vh;
+}

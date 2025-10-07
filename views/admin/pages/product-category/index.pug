@@ -1,0 +1,81 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main 
+
+    h1 Danh mục sản phẩm 
+    div(
+        class="card mb-3"
+    )
+        div(
+            class="card-body"
+        )
+            div(
+                class="row"
+            )   
+                div(
+                    class="col-8"
+                )
+                div(
+                    class="col-4"
+                )
+                    a(
+                        href=`${prefixAdmin}/product-category/create`
+                        class="btn btn-outline-success"
+                    ) +Thêm mới
+    table.table.table-bordered
+        thead
+            tr
+                th Tiêu đề
+                th Hình ảnh
+                th Danh mục cha
+                th Vị trí
+                th Trạng thái
+                th Hành động
+        tbody
+            each item in record
+                tr
+                    td #{item.title}
+                    td 
+                        img(
+                            
+                        )
+                        if item.thumbnail
+                            img(
+                                src=`${item.thumbnail}` 
+                                alt="Hình ảnh danh mục" 
+                                width="100" 
+                                height="auto"
+                            )
+                        else
+                            span Chưa có hình ảnh
+                    if item.parent_id == ""
+                        td Không có danh mục cha
+                    else
+                        td #{item.parent_id}
+                    td #{item.position}
+                    if item.status == 'active'
+                        td 
+                            span(
+                            class="badge badge-success"
+                            ) Hoạt động
+                    else
+                        td 
+                            span(
+                             class="badge badge-danger"
+                            ) Dừng hoạt động
+                    td
+                        a(
+                            href=`${prefixAdmin}/product-category/edit/${item._id}` 
+                            class="btn btn-warning btn-sm"
+                        ) Chỉnh sửa
+                        form(
+                            action=`${prefixAdmin}/product-category/delete/${item._id}` 
+                            method="POST" 
+                            style="display:inline"
+                            onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này không?');"
+                        )
+                            button(
+                                type="submit" 
+                                class="btn btn-danger btn-sm ml-2"
+                            ) Xóa

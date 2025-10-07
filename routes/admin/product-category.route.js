@@ -1,0 +1,19 @@
+
+const express= require ("express");
+const router =express.Router();
+const multer = require('multer')
+const upload = multer() // Sử dụng bộ nhớ tạm thời
+
+const uploadCloud = require("../../middlewares/admin/uploadCloud.middleware");
+const validate = require("../../validates/admin/product-category.validate");
+const controller = require("../../controllers/admin/product-category.controller");
+router.get("/", controller.index);
+router.get("/create", controller.create);
+router.post("/create",
+    upload.single("thumbnail"),
+    uploadCloud.uploadToCloud,
+    validate.titleIsNotNull,
+    validate.description,
+    validate.tileNoLessThan8character,
+    controller.createPost);
+module.exports = router;
