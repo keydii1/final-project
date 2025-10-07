@@ -1,6 +1,7 @@
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 var flash = require('express-flash');
+var path = require('path');
 
 // import express into the Nodejs project
 const express = require("express");
@@ -113,7 +114,10 @@ Nó cho phép bạn giả lập các HTTP method khác (PUT, PATCH, DELETE) thô
  */
 app.use(methodOverride('_method'));
 
+// tinyMCE
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
 
+// end tinyMCE
 // App locals vairables
 const systemConfig = require("./config/system");
 /**
