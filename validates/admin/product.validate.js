@@ -16,3 +16,9 @@ module.exports.tileNoLessThan8character = (req,res,next) => {
     }
     next();
 }
+module.exports.description = (req,res,next) => {
+        if (Array.isArray(req.body.description)) {
+        req.body.description = req.body.description.join(' ');
+        }
+        next();
+}

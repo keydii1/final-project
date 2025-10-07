@@ -19,6 +19,7 @@ router.post("/create",
     uploadCloud.uploadToCloud,
     validate.titleIsNotNull,
     validate.tileNoLessThan8character,
+    validate.description,
     controller.createPost
 );
 router.get("/edit/:id", controller.edit);

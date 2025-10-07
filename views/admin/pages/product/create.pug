@@ -18,16 +18,25 @@ block main
           name="title" 
           placeholder="Nhập tiêu đề sản phẩm"
         )
-
       // Mô tả
       .form-group
         label(for="description") Mô tả
-        textarea#description.form-control(
+        textarea(
+          id="description"
+          class="description"
           name="description" 
           rows="3" 
           placeholder="Nhập mô tả sản phẩm"
         )
-
+      .form-group
+        label(for="description") Nội dung
+        textarea(
+          id="content"
+          class="form-control"
+          name="description" 
+          rows="3" 
+          placeholder="Nhập mô tả sản phẩm"
+        )
       // Giá
       .form-group
         label(for="price") Giá
@@ -37,7 +46,6 @@ block main
           name="price" 
           placeholder="Nhập giá sản phẩm"
         )
-
       // Giảm giá %
       .form-group
         label(for="discountPercentage") Giảm giá (%)
@@ -90,4 +98,3 @@ block main
 
       // Nút submit
       button.btn.btn-primary(type="submit") Thêm sản phẩm
-      
