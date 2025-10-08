@@ -14,6 +14,28 @@ tinymce.init({
       { value: 'First.Name', title: 'First Name' },
       { value: 'Email', title: 'Email' },
     ],
+    file_picker_callback: (callback, value, meta) => {
+  // Tạo input ẩn để chọn file
+  const input = document.createElement('input');
+  input.setAttribute('type', 'file');
+  input.setAttribute('accept', 'image/*');
+
+  // Khi người dùng chọn file
+  input.onchange = function () {
+    const file = this.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function () {
+      // Gửi ảnh đã chọn vào TinyMCE
+      callback(reader.result, { alt: file.name });
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  // Kích hoạt cửa sổ chọn file
+  input.click();
+},
 
     ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
     uploadcare_public_key: 'dda537f19e0147d76a7e',
