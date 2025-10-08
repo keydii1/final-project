@@ -4,6 +4,8 @@ const fillterStatusHelper = require("../../helpers/fillterStatus");
 const paginationHelper = require("../../helpers/panigation");
 const router = require("../../routes/admin/products.route");
 const systemconfig = require("../../config/system.js");
+const createTreeHelper = require("../../helpers/createTree");
+const productCategory = require("../../models/product-category.model");
 module.exports.index = async (req, res) => {
     const fillterStatus = fillterStatusHelper(req.query.status);
 
@@ -116,8 +118,15 @@ module.exports.deleteItem = async(req,res) => {
 // change position
 
 module.exports.create = async(req,res) => {
-res.render("admin/pages/product/create.pug", {
-    pageTitle: "Create New Product"
+    let findCondition = {
+        deleted: false, // to check not deleted products
+    };
+    const category = await productCategory.find(findCondition);
+    const newCategory = createTreeHelper.Tree(category);
+    res.render("admin/pages/product/create.pug", {
+    pageTitle: "Create New Product",
+    category: newCategory
+
 });
 }
 module.exports.createPost = async(req,res) => {
@@ -142,11 +151,14 @@ module.exports.edit = async(req,res) => {
         deleted: false,
         _id: req.params.id
     };
+    const category = await productCategory.find({deleted: false});
+    const newCategory = createTreeHelper.Tree(category);
     const product = await Product.findOne(findCondition);
     console.log(product);
     res.render("admin/pages/product/edit.pug", {
     pageTitle: "Create New Product",
-    product: product
+    product: product,
+    category: newCategory
 });
     }
     catch(err){

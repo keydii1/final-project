@@ -1,58 +1,68 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
 
 block main
   +alert-error("2000")
   .container.mt-4
     h2.mb-4 Thêm sản phẩm mới
     form(
-      action=`${prefixAdmin}/products/create` 
-      method="POST" 
+      action=`${prefixAdmin}/products/create`
+      method="POST"
       enctype="multipart/form-data"
     )
       // Tiêu đề
       .form-group
         label(for="title") Tiêu đề
         input#title.form-control(
-          type="text" 
-          name="title" 
+          type="text"
+          name="title"
           placeholder="Nhập tiêu đề sản phẩm"
         )
+
+      // Danh mục cha
+      .form-group
+        label(for="product_category_id") Danh mục
+        select#parent_id.form-control(name="product_category_id")
+          option(value="") -- Chọn danh mục cha --
+          if category
+            +select-tree(category)
+
       // Mô tả
       .form-group
         label(for="description") Mô tả
-        textarea(
-          id="description"
-          class="description"
-          name="description" 
-          rows="3" 
+        textarea#description.description(
+          name="description"
+          rows="3"
           placeholder="Nhập mô tả sản phẩm"
         )
+
+      // Nội dung
       .form-group
-        label(for="description") Nội dung
-        textarea(
-          id="content"
-          class="form-control"
-          name="description" 
-          rows="3" 
-          placeholder="Nhập mô tả sản phẩm"
+        label(for="content") Nội dung
+        textarea#content.form-control(
+          name="content"
+          rows="3"
+          placeholder="Nhập nội dung sản phẩm"
         )
+
       // Giá
       .form-group
         label(for="price") Giá
         input#price.form-control(
-          type="number" 
+          type="number"
           step="0.01"
-          name="price" 
+          name="price"
           placeholder="Nhập giá sản phẩm"
         )
+
       // Giảm giá %
       .form-group
         label(for="discountPercentage") Giảm giá (%)
         input#discountPercentage.form-control(
-          type="number" 
+          type="number"
           step="0.01"
-          name="discountPercentage" 
+          name="discountPercentage"
           placeholder="Nhập % giảm giá"
         )
 
@@ -60,32 +70,32 @@ block main
       .form-group
         label(for="stock") Số lượng tồn kho
         input#stock.form-control(
-          type="number" 
-          name="stock" 
+          type="number"
+          name="stock"
           placeholder="Nhập số lượng sản phẩm trong kho"
         )
 
       // Hình ảnh
-      .form-group(upload-image)
+      .form-group(data-upload-image)
         label(for="thumbnail") Hình ảnh
         input#thumbnail.form-control(
-          type="file" 
-          name="thumbnail" 
+          type="file"
+          name="thumbnail"
           accept="image/*"
-          upload-image-input
+          data-upload-image-input
         )
-        img(
-          class ="image-preview"
-          src="" 
-          upload-image-preview
+        img.image-preview(
+          src=""
+          alt="Preview"
+          data-upload-image-preview
         )
 
       // Vị trí
       .form-group
         label(for="position") Vị trí
         input#position.form-control(
-          type="number" 
-          name="position" 
+          type="number"
+          name="position"
           placeholder="Nhập vị trí sắp xếp"
         )
 
