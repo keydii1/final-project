@@ -21,3 +21,20 @@ module.exports.createPost = async(req,res) => {
     console.log(req.body)
     res.redirect(`${systemConfig.prefixAdmin}/role`)
 }
+module.exports.edit = async (req,res) => {
+    let findCondition = {
+        deleted:false,
+        _id: req.params.id
+    }
+    const data = await Role.findOne(findCondition);
+    res.render("admin/pages/roles/edit.pug",{
+        pageTitle:"Edit",
+        data: data
+    })
+}
+module.exports.editPatch = async(req,res) => {
+
+    await Role.updateOne({_id:req.params.id},req.body);
+    
+    res.redirect(`${systemConfig.prefixAdmin}/role`)
+}
