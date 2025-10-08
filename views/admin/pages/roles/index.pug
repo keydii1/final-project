@@ -1,0 +1,38 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+  h1 Danh mục sản phẩm
+
+  .card.mb-3
+    .card-body
+      .row
+        .col-8
+        .col-4
+          a.btn.btn-outline-success(
+            href=`${prefixAdmin}/role/create`
+          ) +Thêm mới
+
+  table.table.table-bordered
+    thead
+      tr
+        th Tiêu đề
+        th Mô tả phân quyền
+        th Hành động
+    tbody
+      each item,index in record
+        tr
+          td #{index+1}
+          td #{item.title}
+          td #{item.description}
+          td
+            a.btn.btn-warning.btn-sm(
+              href=`${prefixAdmin}/role/edit/${item._id}`
+            ) Chỉnh sửa
+            form(
+              action=`${prefixAdmin}/role/delete/${item._id}`
+              method="POST"
+              style="display:inline"
+              onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này không?');"
+            )
+              button.btn.btn-danger.btn-sm.ml-2(type="submit") Xóa

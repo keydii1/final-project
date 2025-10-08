@@ -1,0 +1,29 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+
+block main
+    .container.mt-4
+        h2.mb-4 Tạo mới danh mục sản phẩm
+        form(
+            action=`${prefixAdmin}/role/create` 
+            method="POST" 
+        )
+            // Tiêu đề
+            .form-group
+                label(for="title") Tiêu đề
+                input#title.form-control(
+                    type="text" 
+                    name="title" 
+                    placeholder="Nhập tiêu đề danh mục"
+                    required
+                )
+            .form-group
+                label(for="description") Mô tả
+                input#description.form-control(
+                    type="text" 
+                    name="description" 
+                    placeholder="Nhập mô tả phân quyền"
+                )
+            .form-group
+                button.btn.btn-primary(type="submit") Tạo
