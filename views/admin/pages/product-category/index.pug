@@ -49,10 +49,15 @@ block main
                             )
                         else
                             span Chưa có hình ảnh
-                    if item.parent_id == ""
-                        td Không có danh mục cha
-                    else
-                        td #{item.parent_id}
+                    td
+                        if item.parent_id && item.parent_id !== ""
+                            - const parentCategory = record.find(cat => cat._id.toString() === item.parent_id.toString())
+                            if parentCategory
+                                | #{parentCategory.title}
+                            else
+                                | Danh mục cha không tồn tại
+                        else
+                            | Không có danh mục cha
                     td #{item.position}
                     if item.status == 'active'
                         td 

@@ -14,6 +14,5 @@ router.post("/create",
     uploadCloud.uploadToCloud,
     validate.titleIsNotNull,
     validate.description,
-    validate.tileNoLessThan8character,
     controller.createPost);
 module.exports = router;
