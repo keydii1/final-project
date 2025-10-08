@@ -21,14 +21,10 @@ module.exports.create = async (req, res) => {
     const productCategories = await productCategory.find(findCondition);
     const treeData = createTree(productCategories);
 
-
-    // Nếu không có dữ liệu cây, sử dụng dữ liệu thô
-    const dataToUse = treeData.length > 0 ? treeData : productCategories;
-
     res.render("admin/pages/product-category/create.pug", {
         pageTitle: "Tạo danh mục sản phẩm",
         prefixAdmin: systemConfig.prefixAdmin,
-        record: dataToUse
+        record: treeData
     });
 }
 // [POST] amdin/product-category/create
