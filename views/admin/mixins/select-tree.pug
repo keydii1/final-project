@@ -1,6 +1,9 @@
-mixin select-tree(items, level = 1)
+mixin select-tree(items, selectedValue = "", level = 1)
     each item in items
         - const prefix = Array(level + 1).join("---   ")
-        option(value=item._id) #{prefix}#{item.title}
+        if selectedValue && selectedValue == item._id
+            option(value=item._id selected) #{prefix}#{item.title}
+        else
+            option(value=item._id) #{prefix}#{item.title}
         if item.children && item.children.length > 0
-            +select-tree(item.children, level + 1)
+            +select-tree(item.children, selectedValue, level + 1)

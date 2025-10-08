@@ -1,7 +1,7 @@
 module.exports.titleIsNotNull = (req,res,next) => {
-    if(!req.body.title){
-        req.flash('error', 'Title is required');
-        const backURL = req.header('Referer') || '/admin/products';
+    if(!req.body.title || req.body.title.trim() === ""){
+        req.flash('error', 'Tiêu đề không được để trống');
+        const backURL = req.header('Referer') || `${req.app.locals.prefixAdmin}/product-category`;
         res.redirect(backURL);
         return;
     }

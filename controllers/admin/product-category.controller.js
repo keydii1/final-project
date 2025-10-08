@@ -40,3 +40,62 @@ module.exports.createPost = async (req,res) => {
     await recordOfProductCategory.save();
     res.redirect(`${systemConfig.prefixAdmin}/product-category`)
 }
+// [GET] admin/product-category/edit/:id
+module.exports.edit = async (req, res) => {
+    try {
+        const id = req.params.id;
+        
+        // Function để tạo cây thư mục
+        const createTree = createTreeHelper.Tree;
+        
+        // Lấy record cần edit
+        const findCondition = {
+            deleted: false,
+            _id: id
+        };
+        const record = await productCategory.findOne(findCondition);
+        
+        // Lấy tất cả categories để tạo dropdown
+        const allCategories = await productCategory.find({deleted: false});
+        const treeData = createTree(allCategories);
+        
+        if(record){
+            res.render("admin/pages/product-category/edit.pug", {
+                pageTitle: "Cập nhật danh mục sản phẩm",
+                prefixAdmin: systemConfig.prefixAdmin,
+                record: record,
+                categories: treeData
+            });                    
+        } else {
+            req.flash('error', 'Không tìm thấy danh mục');
+            res.redirect(`${systemConfig.prefixAdmin}/product-category`);
+        }
+    } catch (error) {
+        console.log(error);
+        req.flash('error', 'Có lỗi xảy ra');
+        res.redirect(`${systemConfig.prefixAdmin}/product-category`);
+    }
+}
+
+module.exports.PatchPost = async (req,res) => {
+    try {
+        const id = req.params.id;
+        
+        // Xử lý position
+        if(req.body.position === ""){
+            const count = await productCategory.countDocuments({});
+            req.body.position = count + 1;
+        } else {
+            req.body.position = parseInt(req.body.position);
+        }
+        
+        // Cập nhật record
+        await productCategory.updateOne({_id: id}, req.body);
+        req.flash('success', 'Cập nhật danh mục thành công!');
+        res.redirect(`${systemConfig.prefixAdmin}/product-category`);
+    } catch (error) {
+        console.log(error);
+        req.flash('error', 'Có lỗi xảy ra khi cập nhật');
+        res.redirect(`${systemConfig.prefixAdmin}/product-category`);
+    }
+}

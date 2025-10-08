@@ -15,4 +15,11 @@ router.post("/create",
     validate.titleIsNotNull,
     validate.description,
     controller.createPost);
+router.get("/edit/:id", controller.edit);
+router.patch("/edit/:id",
+    upload.single("thumbnail"),
+    uploadCloud.uploadToCloud,
+    validate.titleIsNotNull,
+    validate.description,
+    controller.PatchPost); 
 module.exports = router;
