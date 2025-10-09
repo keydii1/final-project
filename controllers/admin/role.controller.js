@@ -38,3 +38,24 @@ module.exports.editPatch = async(req,res) => {
     
     res.redirect(`${systemConfig.prefixAdmin}/role`)
 }
+module.exports.permission = async(req,res) => {
+    const findCondition  = {
+        deleted:false
+    }
+    const record = await Role.find(findCondition);
+    res.render("admin/pages/roles/permission.pug",{
+        pageTitle:"Phân quyền",
+        record: record
+    });
+}
+
+module.exports.patchPermission = async(req,res) => {
+    if(req.body) {
+        const permissions = JSON.parse(req.body.permissions);
+        for(const item of permissions) {
+            await Role.updateOne({_id:item.id},{permissions: item.permissions})     
+        }
+    }
+    req.flash("success","Cập nhật quyền thành công")
+    res.redirect(`${systemConfig.prefixAdmin}/role/permission`)
+}

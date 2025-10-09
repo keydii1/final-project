@@ -1,0 +1,97 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+    +alert-success(2000)
+    h1(class="mt-4") Phân quyền
+
+    div(class="text-right")
+        button(
+            type="submit" 
+            class="btn btn-primary mb-3" 
+            button-submit
+        ) Cập nhật
+
+    table(class="table table-hover table-bordered" table-permission)
+        thead
+            tr
+                th Tính năng
+                each item in record
+                    th(class="text-center")= item.title
+        tbody
+            tr(data-name="id" class="d-none")
+                td
+                each item in record
+                    td(class="text-center")
+                        input(
+                            type="text"
+                            value=item.id
+                            name="permissions["+item.id+"]"
+                        )
+            tr
+                td(colspan=record.length + 1)
+                    b Danh mục sản phẩm
+            tr(data-name="product_category_view")
+                td Xem
+                each item in record
+                    td(class="text-center")
+                        input(
+                            type="checkbox"
+                            name="permissions["+item.id+"][view]"
+                        )
+            tr(data-name="product_category_create")
+                td Thêm mới
+                each item in record
+                    td(class="text-center")
+                        input(
+                            type="checkbox"
+                            name="permissions["+item.id+"][create]"
+                        )
+            tr(data-name="product_category_edit")
+                td Chỉnh sửa
+                each item in record
+                    td(class="text-center")
+                        input(
+                            type="checkbox"
+                            name="permissions["+item.id+"][edit]"
+                        )
+            tr(data-name="product_category_delete")
+                td Xóa
+                each item in record
+                    td(class="text-center")
+                        input(
+                            type="checkbox"
+                            name="permissions["+item.id+"][delete]"
+                        )
+
+            tr(data-name="extra_permissions")
+                td Các quyền khác
+                td(class="text-center")
+                    input(
+                        type="checkbox" 
+                        name="permission[]" 
+                        value="content_delete_products"
+                        checked=(data && data.permissions.includes('content_delete_products')) ? true : false
+                    )
+                td(class="text-center")
+                    input(
+                        type="checkbox" 
+                        name="permission[]" 
+                        value="category_delete_products"
+                        checked=(data && data.permissions.includes('category_delete_products')) ? true : false
+                    )
+    form(
+        action=`${prefixAdmin}/role/permission?_method=PATCH`
+         method="POST" 
+         id="form-change-permission"
+         class="d-none"
+         )
+        div(
+            class="form-group"
+        )
+            input(
+                type="text"
+                name="permissions"
+                class="form-control"
+            )
+    script(src=`${prefixAdmin}/scripts/role.js`)
