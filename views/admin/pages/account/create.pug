@@ -1,0 +1,110 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+  //- Hiển thị thông báo nếu có (ví dụ: tạo tài khoản thành công)
+  +alert-success(3000)
+  +alert-error(5000)
+
+  h1(class="mb-4") Thêm mới tài khoản
+
+  //- Bắt đầu form. Chú ý enctype="multipart/form-data" là bắt buộc để upload file
+  form(
+    action=`${prefixAdmin}/accounts/create`
+    method="POST"
+    enctype="multipart/form-data"
+  )
+    //- Họ tên
+    div(class="form-group")
+      label(for="fullName") Họ tên *
+      input(
+        type="text"
+        class="form-control"
+        id="fullName"
+        name="fullname"
+        required
+      )
+
+    //- Email
+    div(class="form-group")
+      label(for="email") Email *
+      input(
+        type="email"
+        class="form-control"
+        id="email"
+        name="email"
+        required
+      )
+
+    //- Mật khẩu
+    div(class="form-group")
+      label(for="password") Mật khẩu *
+      input(
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+        required
+      )
+
+    //- Số điện thoại
+    div(class="form-group")
+      label(for="phone") Số điện thoại
+      input(
+        type="text"
+        class="form-control"
+        id="phone"
+        name="phone"
+      )
+
+    //- Avatar
+    div(class="form-group")
+      label(for="avatar") Avatar
+      input(
+        type="file"
+        class="form-control-file"
+        id="avatar"
+        name="avatar"
+        accept="image/*"
+      )
+
+    //- Phân quyền (Dropdown)
+    div(class="form-group")
+      label(for="role_id") Phân quyền
+      select(
+        name="role_id"
+        id="role_id"
+        class="form-control"
+        required
+      )
+        option(value="" disabled selected) -- Chọn nhóm quyền --
+        //- Giả sử bạn có một biến 'roles' được truyền từ controller
+        each role in roles
+          option(value=role._id) #{role.title}
+
+    //- Trạng thái (Radio button)
+    div(class="form-group")
+      label Hoạt động
+      input(
+        type="radio"
+        name="status"
+        id="statusActive"
+        value="active"
+        checked
+        class="ml-2"
+      )
+      label(class="ml-4") Dừng hoạt động
+      input(
+        type="radio"
+        name="status"
+        id="statusInactive"
+        value="inactive"
+        class="ml-2"
+      )
+
+    //- Nút submit
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Tạo mới
