@@ -44,3 +44,48 @@ module.exports.createPost = async(req,res) => {
     console.log(req.body)
     res.redirect(`${systemConfig.prefixAdmin}/accounts`)
 }
+module.exports.edit = async (req,res) => {
+    let findCondition = {
+        deleted:false,
+        _id: req.params.id
+    }
+    const account = await Accounts.findOne(findCondition);
+    const findRoleCondition  = {
+        deleted:false
+    }
+    const RoleRecord = await Role.find(findRoleCondition);
+    const roles = await Role.find
+        const findRole = {
+            _id: account.role_id,
+            deleted: false
+        }
+        account.role = await Role.findOne(findRole);
+    
+    res.render("admin/pages/account/edit.pug",{
+        pageTitle:"Edit",
+        account: account,
+        roles: RoleRecord
+        
+}
+    )
+}   
+module.exports.editPatch = async(req,res) => {
+    const emailExist = await Accounts.findOne({
+        email: req.body.email,
+        _id: { $ne: req.params.id } // Exclude the current account being edited
+    });
+    if(emailExist) {
+        req.flash("error","Email đã tồn tại, vui lòng sử dụng email khác")
+        return res.redirect(`${systemConfig.prefixAdmin}/accounts/edit/${req.params.id}`)
+    }else{
+        if(req.body.password) {
+            req.body.password = md5(req.body.password);
+        } else {
+            delete req.body.password; // Remove password field if not provided
+        }
+        await Accounts.updateOne({_id:req.params.id},req.body);
+        
+        res.redirect(`${systemConfig.prefixAdmin}/accounts`)    
+
+    }
+}
