@@ -1,43 +1,59 @@
 // permission
-const table = document.querySelector("[table-permission]");
-if (table) {
-    const buttonSubmit = document.querySelector("[button-submit]");
-    if (buttonSubmit) {
-        buttonSubmit.addEventListener("click", () => {
-            let permissions = [];
-            const rows = table.querySelectorAll("[data-name]");
+const tablePermission = document.querySelector("[table-permission]");
+if (tablePermission) {
+  const buttonSubmit = document.querySelector("[button-submit]");
+  if (buttonSubmit) {
+    buttonSubmit.addEventListener("click", () => {
+      const roles = [];
 
-            rows.forEach(row => {
-                const name = row.getAttribute("data-name");
-                const inputs = row.querySelectorAll("input");
+      const listTh = tablePermission.querySelectorAll("thead th[data-id]");
+      listTh.forEach(th => {
+        const roleId = th.getAttribute("data-id");
+        roles.push({
+          id: roleId,
+          permissions: []
+        });
+      });
 
-                // Nếu là hàng chứa ID
-                if (name === "id") {
-                    inputs.forEach(input => {
-                        const id = input.getAttribute("value");
-                        permissions.push({
-                            id: id,
-                            permissions: [] // ✅ thêm mảng rỗng
-                        });
-                    });
-                } else {
-                    // Các hàng còn lại (view, create, edit, delete...)
-                    inputs.forEach((input, index) => {
-                        const checked = input.checked;
-                        if (checked && permissions[index]) {
-                            permissions[index].permissions.push(name);
-                        }
-                    });
-                }
-            });
+      const listTr = tablePermission.querySelectorAll("tbody tr[data-name]");
+      listTr.forEach(tr => {
+        const permissionName = tr.getAttribute("data-name");
+        const listInput = tr.querySelectorAll("input[type='checkbox']");
 
-            console.log(permissions);
-            if(permissions.length > 0) {
-                const formChangePermission = document.querySelector("#form-change-permission");
-                const inputPermissions = formChangePermission.querySelector("input[name='permissions']");
-                inputPermissions.value = JSON.stringify(permissions);
-                formChangePermission.submit();
-        }     });
-    }
+        listInput.forEach((input, index) => {
+          if (input.checked) {
+            roles[index].permissions.push(permissionName);
+          }
+        });
+      });
+
+      if (roles.length > 0) {
+        const formChangePermission = document.querySelector("#form-change-permission");
+        const inputPermissions = formChangePermission.querySelector("input[name='permissions']");
+        inputPermissions.value = JSON.stringify(roles);
+        formChangePermission.submit();
+      }
+    });
+  }
 }
 // end of permission
+
+// permissionn data default
+const dataRecord = document.querySelector("[data-record]");
+if(dataRecord){
+    const record = JSON.parse(dataRecord.getAttribute("data-record"));
+    const tablePermission = document.querySelector("[table-permission]");
+    record.forEach((Arecord,index) => {
+        const permissions = Arecord.permissions;
+        permissions.forEach(permission => {
+            const row = tablePermission.querySelector(`tbody tr[data-name='${permission}']`);
+            if(row) {
+              const input = row.querySelectorAll("input")[index];
+              if(input) {
+                input.checked = true;
+              }
+            }
+        })
+    })
+}
+// end of permission data default
