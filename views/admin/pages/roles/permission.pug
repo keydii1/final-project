@@ -2,6 +2,9 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main
+    if !role.permissions.includes("permission_view")
+        h1 Bạn chưa được cấp quyền phân quyền, vui lòng liên hệ quản trị viên
+        return
     //- Hiển thị thông báo (nếu có)
     +alert-success(2000)
 
@@ -17,7 +20,6 @@ block main
             class="btn btn-primary mb-3" 
             button-submit
         ) Cập nhật
-
     //- Bảng phân quyền
     table(class="table table-hover table-bordered" table-permission)
         thead
@@ -76,7 +78,6 @@ block main
                 each item in record
                     td(class="text-center")
                         input(type="checkbox")
-
             //- Bắt đầu nhóm quyền: Nhóm quyền
             tr
                 td(colspan=record.length + 1)
@@ -101,6 +102,55 @@ block main
                 each item in record
                     td(class="text-center")
                         input(type="checkbox")
+            //- Bắt đầu nhóm quyền: Tài khoản
+            tr
+                td(colspan=record.length + 1)
+                    b Phân quyền tài khoản
+            tr(data-name="permission_view")
+                td Xem
+                each item in record
+                    td(class="text-center")
+                        input(type="checkbox")
+            tr(data-name="permission_create")
+                td Thêm mới
+                each item in record
+                    td(class="text-center")
+                        input(type="checkbox")
+            tr(data-name="permission_edit")
+                td Chỉnh sửa
+                each item in record
+                    td(class="text-center")
+                        input(type="checkbox")
+            tr(data-name="permission_delete")
+                td Xóa
+                each item in record
+                    td(class="text-center")
+                        input(type="checkbox")
+            //- Bắt đầu nhóm quyền: Danh sách tài khoản
+            tr
+                td(colspan=record.length + 1)
+                    b Danh sách tài khoản
+            tr(data-name="account_view")
+                td Xem
+                each item in record
+                    td(class="text-center")
+                        input(type="checkbox")
+            tr(data-name="account_create")
+                td Thêm mới
+                each item in record
+                    td(class="text-center")
+                        input(type="checkbox")
+            tr(data-name="account_edit")
+                td Chỉnh sửa
+                each item in record
+                    td(class="text-center")
+                        input(type="checkbox")
+            tr(data-name="account_delete")
+                td Xóa
+                each item in record
+                    td(class="text-center")
+                        input(type="checkbox")
+
 
     //- Form ẩn để gửi dữ liệu đi, được điều khiển bằng JavaScript
     form(

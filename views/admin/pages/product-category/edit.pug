@@ -3,71 +3,74 @@ include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 
 block main
-    +alert-error("2000")
-    .container.mt-4
-        h2.mb-4 Chỉnh sửa  danh mục sản phẩm
-        form(
-            action=`${prefixAdmin}/product-category/edit/${record._id}?_method=PATCH` 
-            method="POST" 
-            enctype="multipart/form-data"
-        )
-            // Tiêu đề
-            .form-group
-                label(for="title") Tiêu đề
-                input#title.form-control(
-                    type="text" 
-                    name="title" 
-                    placeholder="Nhập tiêu đề danh mục"
-                    required
-                    value= record.title
-                )
-            
-            // Danh mục cha
-            .form-group
-                label(for="parent_id") Danh mục cha
-                select#parent_id.form-control(name="parent_id")
-                    option(value="") -- Chọn danh mục cha --
-                    if categories && categories.length > 0
-                        +select-tree(categories, record.parent_id)
-            // Hình ảnh
-            .form-group(data-upload-image)
-                label(for="thumbnail") Hình ảnh
-                input#thumbnail.form-control(
-                    type="file" 
-                    name="thumbnail" 
-                    accept="image/*"
-                    data-upload-image-input
-                )
-                img.image-preview(
-                    src=`${record.thumbnail}`
-                    alt="Preview"
-                    style="max-width: 200px; margin-top: 10px;"
-                    data-upload-image-preview
-                )
+    if role.permissions.includes("products-category_edit")
+        +alert-error("2000")
+        .container.mt-4
+            h2.mb-4 Chỉnh sửa  danh mục sản phẩm
+            form(
+                action=`${prefixAdmin}/product-category/edit/${record._id}?_method=PATCH` 
+                method="POST" 
+                enctype="multipart/form-data"
+            )
+                // Tiêu đề
+                .form-group
+                    label(for="title") Tiêu đề
+                    input#title.form-control(
+                        type="text" 
+                        name="title" 
+                        placeholder="Nhập tiêu đề danh mục"
+                        required
+                        value= record.title
+                    )
+                
+                // Danh mục cha
+                .form-group
+                    label(for="parent_id") Danh mục cha
+                    select#parent_id.form-control(name="parent_id")
+                        option(value="") -- Chọn danh mục cha --
+                        if categories && categories.length > 0
+                            +select-tree(categories, record.parent_id)
+                // Hình ảnh
+                .form-group(data-upload-image)
+                    label(for="thumbnail") Hình ảnh
+                    input#thumbnail.form-control(
+                        type="file" 
+                        name="thumbnail" 
+                        accept="image/*"
+                        data-upload-image-input
+                    )
+                    img.image-preview(
+                        src=`${record.thumbnail}`
+                        alt="Preview"
+                        style="max-width: 200px; margin-top: 10px;"
+                        data-upload-image-preview
+                    )
 
-            // Vị trí
-            .form-group
-                label(for="position") Vị trí
-                input#position.form-control(
-                    type="number" 
-                    name="position" 
-                    placeholder="Để trống để tự động sắp xếp"
-                    value= record.position
-                )
+                // Vị trí
+                .form-group
+                    label(for="position") Vị trí
+                    input#position.form-control(
+                        type="number" 
+                        name="position" 
+                        placeholder="Để trống để tự động sắp xếp"
+                        value= record.position
+                    )
 
-            // Trạng thái
-            .form-group
-                label(for="status") Trạng thái
-                select#status.form-control(name="status" required)
-                    if record.status == 'active'
-                        option(value="active" selected) Kích hoạt
-                        option(value="inactive") Vô hiệu hóa
-                    else if record.status == 'inactive'
-                        option(value="active") Kích hoạt
-                        option(value="inactive" selected) Vô hiệu hóa
-                    
+                // Trạng thái
+                .form-group
+                    label(for="status") Trạng thái
+                    select#status.form-control(name="status" required)
+                        if record.status == 'active'
+                            option(value="active" selected) Kích hoạt
+                            option(value="inactive") Vô hiệu hóa
+                        else if record.status == 'inactive'
+                            option(value="active") Kích hoạt
+                            option(value="inactive" selected) Vô hiệu hóa
+                        
 
-            // Nút submit
-            .form-group
-                button.btn.btn-primary(type="submit") Cập nhật danh mục
-                a.btn.btn-secondary.ml-2(href=`${prefixAdmin}/product-category`) Hủy
+                // Nút submit
+                .form-group
+                    button.btn.btn-primary(type="submit") Cập nhật danh mục
+                    a.btn.btn-secondary.ml-2(href=`${prefixAdmin}/product-category`) Hủy
+    else
+        h1 Bạn chưa được cấp quyền chỉnh sửa danh mục sản phẩm, vui lòng liên hệ quản trị viên

@@ -2,6 +2,9 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main
+  if !role.permissions.includes("account_edit")
+    h1 Bạn chưa được cấp quyền chỉnh sửa tài khoản, vui lòng liên hệ quản trị viên
+    return
   //- Hiển thị thông báo nếu có (ví dụ: tạo tài khoản thành công)
   +alert-success(3000)
   +alert-error(5000)

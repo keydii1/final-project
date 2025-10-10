@@ -1,62 +1,68 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
-block main 
-    h1 Tài khoản
-    div(
-        class="card mb-3"
-    )
+block main
+    if role.permissions.includes("account_view")
+        h1 Tài khoản
         div(
-            class="card-body"
+            class="card mb-3"
         )
             div(
-                class="row"
-            )   
+                class="card-body"
+            )
                 div(
-                    class="col-8"
-                )
-                div(
-                    class="col-4"
-                )
-                    a(
-                        href=`${prefixAdmin}/accounts/create`
-                        class="btn btn-outline-success"
-                    ) +Thêm mới
-    if(accounts.length > 0)
-        table.table.table-bordered
-            thead
-                tr
-                    th Họ tên
-                    th Email
-                    th Số điện thoại
-                    th Vai trò
-                    th Trạng thái
-                    th Hành động
-            tbody
-                each item in accounts
+                    class="row"
+                )   
+                    div(
+                        class="col-8"
+                    )
+                    div(
+                        class="col-4"
+                    )
+                        if role.permissions.includes("account_create")
+                            a(
+                                href=`${prefixAdmin}/accounts/create`
+                                class="btn btn-outline-success"
+                            ) +Thêm mới
+        if(accounts.length > 0)
+            table.table.table-bordered
+                thead
                     tr
-                        td #{item.fullname}
-                        td #{item.email}
-                        td #{item.phone ? item.phone : 'Chưa có'}
-                        td #{item.role.title ?item.role.title : 'Chưa có'}
-                        td 
-                            if item.status === "active"
-                                span.badge.badge-success Hoạt động
-                            else if item.status === "inactive"
-                                span.badge.badge-secondary Không hoạt động
-                            else if item.status === "suspended"
-                                span.badge.badge-danger Bị khóa
-                            else
-                                span.badge.badge-warning Không xác định
-                        td 
-                            a(
-                                href=`${prefixAdmin}/accounts/edit/${item._id}`
-                                class="btn btn-sm btn-primary mr-2"
-                            ) Sửa
-                            a(
-                                href=`${prefixAdmin}/accounts/delete/${item._id}`
-                                class="btn btn-sm btn-danger"
-                                onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản này?');"
-                            ) Xóa
-    else 
-        p Chưa có tài khoản nào. Hãy thêm mới!
+                        th Họ tên
+                        th Email
+                        th Số điện thoại
+                        th Vai trò
+                        th Trạng thái
+                        th Hành động
+                tbody
+                    each item in accounts
+                        tr
+                            td #{item.fullname}
+                            td #{item.email}
+                            td #{item.phone ? item.phone : 'Chưa có'}
+                            td #{item.role.title ?item.role.title : 'Chưa có'}
+                            td 
+                                if item.status === "active"
+                                    span.badge.badge-success Hoạt động
+                                else if item.status === "inactive"
+                                    span.badge.badge-secondary Không hoạt động
+                                else if item.status === "suspended"
+                                    span.badge.badge-danger Bị khóa
+                                else
+                                    span.badge.badge-warning Không xác định
+                            td 
+                                if role.permissions.includes("account_edit")
+                                    a(
+                                        href=`${prefixAdmin}/accounts/edit/${item._id}`
+                                        class="btn btn-sm btn-primary mr-2"
+                                    ) Sửa
+                                if role.permissions.includes("account_delete")
+                                    a(
+                                        href=`${prefixAdmin}/accounts/delete/${item._id}`
+                                        class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản này?');"
+                                    ) Xóa
+        else 
+            p Chưa có tài khoản nào. Hãy thêm mới!
+    else
+        h1 Bạn chưa được cấp quyền xem tài khoản, vui lòng liên hệ quản trị viên

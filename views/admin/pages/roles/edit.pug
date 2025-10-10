@@ -3,29 +3,33 @@ include ../../mixins/alert.pug
 
 
 block main
-    .container.mt-4
-        h2.mb-4 CHỉnh sửa phân quyền
-        form(
-            action=`${prefixAdmin}/role/edit/${data._id}?_method=PATCH` 
-            method="POST" 
-        )
-            // Tiêu đề
-            .form-group
-                label(for="title") Tiêu đề
-                input#title.form-control(
-                    type="text" 
-                    name="title" 
-                    placeholder="Nhập tiêu đề danh mục"
-                    value=data.title
-                    required
-                )
-            .form-group
-                label(for="description") Mô tả
-                input#description.form-control(
-                    type="text" 
-                    name="description" 
-                    placeholder="Nhập mô tả phân quyền"
-                    value=data.description
-                )
-            .form-group
-                button.btn.btn-primary(type="submit") Cập nhật
+    if role.permissions.includes("roles_edit")
+        +alert-success("2000")
+        .container.mt-4
+            h2.mb-4 CHỉnh sửa phân quyền
+            form(
+                action=`${prefixAdmin}/role/edit/${data._id}?_method=PATCH` 
+                method="POST" 
+            )
+                // Tiêu đề
+                .form-group
+                    label(for="title") Tiêu đề
+                    input#title.form-control(
+                        type="text" 
+                        name="title" 
+                        placeholder="Nhập tiêu đề danh mục"
+                        value=data.title
+                        required
+                    )
+                .form-group
+                    label(for="description") Mô tả
+                    input#description.form-control(
+                        type="text" 
+                        name="description" 
+                        placeholder="Nhập mô tả phân quyền"
+                        value=data.description
+                    )
+                .form-group
+                    button.btn.btn-primary(type="submit") Cập nhật
+    else 
+        h1 Bạn chưa được cấp quyền chỉnh sửa vai trò, vui lòng liên hệ quản trị viên
