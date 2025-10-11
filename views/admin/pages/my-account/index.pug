@@ -1,0 +1,39 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main
+    h1(class="mt-4") Thông tin tài khoản
+    +alert-success(2000)
+    +alert-error(2000)
+
+    //- Hiển thị thông tin tài khoản
+    
+    div(class="card mb-4")
+        div(class="card-body")
+            p
+                strong Họ tên: 
+                | #{account.fullname}
+            p
+                strong Email: 
+                | #{account.email}
+            p
+                strong Số điện thoại: 
+                | #{account.phone ? account.phone : 'Chưa cập nhật'}
+            p
+                strong Vai trò: 
+                | #{account.role_id ? role.title : 'Chưa cập nhật'}
+            p
+                strong Ngày tạo: 
+                | #{moment(account.createdAt).format('DD/MM/YYYY HH:mm:ss')}
+            p
+                strong Người tạo: 
+                | #{account.createByPerson ? account.createByPerson : 'N/A'}
+            if account.updatedByPerson
+                p
+                    strong Cập nhật lần cuối bởi: 
+                    | #{account.updatedByPerson.fullname ? account.updatedByPerson.fullname : 'N/A'}
+            else
+                p.text-muted Chưa cập nhật
+
+    //- Form cập nhật thông tin tài khoản
+    div(class="card")
+       a(href=`${prefixAdmin}/my-account/edit/` class="btn btn-primary m-1") Cập nhật thông tin tài khoản

@@ -53,6 +53,18 @@ module.exports.index = async (req, res) => {
             product.createByPerson = account.fullname;
         }
     }
+    for( product of products){
+        if(product.updatedBy && product.updatedBy.length >0){
+            const lastUpdate = product.updatedBy[product.updatedBy.length -1];
+            const account = await Accounts.findOne({
+                _id: lastUpdate.account_id
+            })
+            if(account){
+             lastUpdate.fullname = account.fullname; // ✅ đúng
+                product.updatedByPerson = lastUpdate;
+            }
+        }
+    }
     res.render("admin/pages/product/index.pug", {
         pageTitle: "Admin Product Page",
         products: products,
@@ -64,9 +76,18 @@ module.exports.index = async (req, res) => {
 
 module.exports.changeStatus = async(req,res) => {
     // this params usually combine with patch method
+    //   const updateBy = {
+    //     account_id: res.locals.account._id,
+    //     updatedAt: new Date()
+    // };
      const status = req.params.status;
       const id = req.params.id;
-      await Product.updateOne({ _id: id } , { status: status});
+      await Product.updateOne({ _id: id } , { status: status,
+        $push: { updatedBy: {
+            account_id: res.locals.account._id,
+            updatedAt: new Date()
+        } }
+      });
     req.flash('success', 'Updated successfully');
 
         const backURL = req.header('Referer') || '/admin/products';
@@ -75,14 +96,31 @@ module.exports.changeStatus = async(req,res) => {
 module.exports.changeMulti = async(req,res) => {
     const type = req.body.type;
     const ids = req.body.ids. split(","); // convert string to array
+        const updateBy = {
+        account_id: res.locals.account._id,
+        updatedAt: new Date()
+    };
     switch(type){
         case "active":
             // function to change status to active in mongoose
-            await Product.updateMany({_id: {$in: ids}}, {status: "active"});
+            await Product.updateMany({_id: {$in: ids}},
+                {
+            status: "active",
+            $push: { updatedBy: {
+            account_id: res.locals.account._id,
+            updatedAt: new Date()
+        } }
+            });
             req.flash('success', `Updated ${ids.length} item successfully`);
             break;
         case "inactive":
-            await Product.updateMany({_id: {$in: ids}}, {status: "inactive"});
+            await Product.updateMany({_id: {$in: ids}}, 
+            {status: "inactive",
+            $push: { updatedBy: {
+            account_id: res.locals.account._id,
+            updatedAt: new Date()
+        } }
+            });
             req.flash('success', `Updated ${ids.length} item successfully`);
             break;
         case "selected-delete":
@@ -92,7 +130,11 @@ module.exports.changeMulti = async(req,res) => {
                 deletedBy:{
                     account_id: res.locals.account._id,
                     deletedAt: new Date()
-                }   
+                },
+            $push: { updatedBy: {
+            account_id: res.locals.account._id,
+            updatedAt: new Date()
+        } }   
             });
             req.flash('success', `Deleted ${ids.length} item successfully`);
             break;
@@ -101,7 +143,11 @@ module.exports.changeMulti = async(req,res) => {
                 const parts = item.split(":");
                 const id = parts[0];
                 const position = parseInt(parts[1]) || 0;
-                await Product.updateOne({_id: id}, {position: position});
+            await Product.updateOne({_id: id}, {position: position,
+            $push: { updatedBy: {
+            account_id: res.locals.account._id,
+            updatedAt: new Date()
+                }}});
             }
             req.flash('success', `Changed position of ${ids.length} item successfully`);
             break;
@@ -191,7 +237,17 @@ module.exports.editPatch = async(req,res) => {
     req.body.position = parseInt(req.body.position) ;
     if(req.file) req.body.thumbnail = `/uploads/${req.file.filename}`;
     try{
-    await Product.updateOne({_id: req.params.id}, req.body);
+    const updateBy = {
+        account_id: res.locals.account._id,
+        updatedAt: new Date()
+    };
+    // nếu đây gán là req.body thì sẽ ghi đè lên mảng updatedBy và mảng này lúc nào cũng chỉ có 1 phần tử
+    // nếu muốn push vào mảng thì dùng cú pháp $push của mongoose
+    await Product.updateOne({_id: req.params.id},
+      {
+        $set: req.body,
+        $push: { updatedBy: updateBy },
+      });
     req.flash('success', 'Updated successfully');
     }
     catch(err){

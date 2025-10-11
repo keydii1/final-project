@@ -43,6 +43,7 @@ block main
             th Vị trí
             th Trạng thái
             th Người tạo
+            th Người cập nhập gần nhất
             th Hành động
         tbody
           each item, index in products
@@ -89,6 +90,11 @@ block main
               td 
                 p #{item.createByPerson ? item.createByPerson : 'N/A'}
                 p #{moment(item.createdAt).format('DD/MM/YYYY HH:mm:ss')}
+              td 
+                if item.updatedByPerson
+                  p #{item.updatedByPerson.fullname ? item.updatedByPerson.fullname : 'N/A'}
+                else
+                  p.text-muted Chưa cập nhật
               td
                 a(
                   href=`${prefixAdmin}/products/detail/${item.id}`

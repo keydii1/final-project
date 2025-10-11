@@ -1,0 +1,48 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main
+    h1(class="mt-4") Thông tin tài khoản
+    +alert-success(2000)
+    +alert-error(2000)
+
+    //- Hiển thị thông tin tài khoản
+    form(
+        action=`${prefixAdmin}/my-account/edit?_method=PATCH`
+        method="POST"
+        )
+        .card.mb-4
+            .card-body
+                .form-group
+                    label(for="fullName") Họ tên *
+                    input#fullName.form-control(
+                        type="text" 
+                        name="fullname" 
+                        required
+                        value=account.fullname
+                    )
+                .form-group
+                    label(for="email") Email *
+                    input#email.form-control(
+                        type="email" 
+                        name="email" 
+                        required
+                        value=account.email
+                    )
+                .form-group
+                    label(for="password") Mật khẩu (Để trống nếu không muốn thay đổi)
+                    input#password.form-control(
+                        type="password" 
+                        name="password" 
+                        placeholder="Nhập mật khẩu mới"
+                        value=""
+                        
+                    )
+                .form-group
+                    label(for="phone") Số điện thoại
+                    input#phone.form-control(
+                        type="text" 
+                        name="phone" 
+                        value=account.phone
+                    )
+                button(type="submit" class="btn btn-primary") Cập nhật thông tin tài khoản
+    
