@@ -6,6 +6,7 @@ const router = require("../../routes/admin/products.route");
 const systemconfig = require("../../config/system.js");
 const createTreeHelper = require("../../helpers/createTree");
 const productCategory = require("../../models/product-category.model");
+const Accounts = require("../../models/account.model");
 module.exports.index = async (req, res) => {
     const fillterStatus = fillterStatusHelper(req.query.status);
 
@@ -44,6 +45,14 @@ module.exports.index = async (req, res) => {
     .limit(objectPagination.limitItems)
     .skip(objectPagination.skip);
     // console.log(products);
+    for( product of products){
+        const account = await Accounts.findOne({
+            _id: product.createBy.account_id
+        })
+        if(account){
+            product.createByPerson = account.fullname;
+        }
+    }
     res.render("admin/pages/product/index.pug", {
         pageTitle: "Admin Product Page",
         products: products,
@@ -56,7 +65,6 @@ module.exports.index = async (req, res) => {
 module.exports.changeStatus = async(req,res) => {
     // this params usually combine with patch method
      const status = req.params.status;
-     console.log(status);
       const id = req.params.id;
       await Product.updateOne({ _id: id } , { status: status});
     req.flash('success', 'Updated successfully');
@@ -138,7 +146,11 @@ module.exports.createPost = async(req,res) => {
         countProducts +=1;
         req.body.position = countProducts;
     }
+
     else{ req.body.position = parseInt(req.body.position) || 0;}
+    req.body.createBy = {
+        account_id: res.locals.account._id
+    };
     const newProduct = new Product(req.body);
     await newProduct.save();
     res.redirect(`${systemconfig.prefixAdmin}/products`);
@@ -146,7 +158,6 @@ module.exports.createPost = async(req,res) => {
 
 module.exports.edit = async(req,res) => {
     try{
-    console.log(req.params.id);
     const findCondition = {
         deleted: false,
         _id: req.params.id
@@ -154,7 +165,6 @@ module.exports.edit = async(req,res) => {
     const category = await productCategory.find({deleted: false});
     const newCategory = createTreeHelper.Tree(category);
     const product = await Product.findOne(findCondition);
-    console.log(product);
     res.render("admin/pages/product/edit.pug", {
     pageTitle: "Create New Product",
     product: product,
@@ -183,7 +193,6 @@ module.exports.editPatch = async(req,res) => {
 }
 
 module.exports.detail = async(req,res) => {
-    console.log(req.params.id);
     const findCondition = {
         deleted: false,
         _id: req.params.id

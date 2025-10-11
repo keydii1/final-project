@@ -2,7 +2,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 var flash = require('express-flash');
 var path = require('path');
-
+const momnet = require('moment');
 // import express into the Nodejs project
 const express = require("express");
 // express() is a function that create object aplication(web application)
@@ -51,7 +51,6 @@ Thường dùng khi client gửi API bằng fetch, axios, Postman với header C
 app.use(express.json());
 
 
-
 // tức là những file code trong thư mục public thì người dừng có thấy và truy cập được thông qua url
 /**
 Khi có app.use(express.static("public"))
@@ -79,6 +78,7 @@ Code Node.js (file .js trong backend) không bao giờ bị lộ ra client (dù 
 Client chỉ thấy kết quả mà server gửi về (HTML, JSON, file tĩnh được cho phép).
 
  */
+
 app.use(express.static(`${__dirname}/public`));
 /**
 🔹 1. app.set("views", "./views");
@@ -135,6 +135,7 @@ app.locals.prefixAdmin = "/admin";
 Thì trong bất kỳ file .pug, bạn có thể dùng trực tiếp prefixAdmin.
  */
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
+app.locals.moment = momnet;
 
 //Routes init
 /**

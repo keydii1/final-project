@@ -15,6 +15,13 @@ const productSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    createBy: {
+        account_id: String,
+        createdAt: {
+            type: String,
+            default: Date.now()
+        }
+    },
     slug: {
         type: String, 
         slug: "title",
