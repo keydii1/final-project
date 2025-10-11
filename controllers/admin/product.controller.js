@@ -87,8 +87,12 @@ module.exports.changeMulti = async(req,res) => {
             break;
         case "selected-delete":
             // soft delete 
-            await Product.updateMany({_id: {$in: ids}}, {deleted: true,
-                deletedAt: new Date()
+            await Product.updateMany({_id: {$in: ids}}, {
+                deleted: true,
+                deletedBy:{
+                    account_id: res.locals.account._id,
+                    deletedAt: new Date()
+                }   
             });
             req.flash('success', `Deleted ${ids.length} item successfully`);
             break;
@@ -115,9 +119,13 @@ module.exports.deleteItem = async(req,res) => {
     // hard delete
     // await Product.deleteOne({_id: id});
     // sofft delete
-     await Product.updateOne({_id: id}, {deleted: true,
-        deletedAt: new Date()
-     });
+     await Product.updateOne({_id: id}, {
+        deleted: true,
+        deletedBy:{
+            account_id: res.locals.account._id,
+            deletedAt: new Date()
+        }
+    });
     const backURL = req.header('Referer') || '/admin/products';
     res.redirect(backURL);
 }
