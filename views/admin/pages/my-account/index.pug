@@ -13,6 +13,12 @@ block main
                 strong Họ tên: 
                 | #{account.fullname}
             p
+            p 
+                strong Image: 
+                    if account.avatar
+                        img(src=account.avatar alt="Avatar" style="max-width: 150px; border-radius: 8px;")
+                    else
+                        | Chưa cập nhật
                 strong Email: 
                 | #{account.email}
             p

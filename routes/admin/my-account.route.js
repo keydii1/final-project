@@ -1,13 +1,23 @@
-const controller = require("../../controllers/admin/my-account.controller");
 const express = require("express");
-const systemconfig = require("../../config/system");
-const multer = require("multer");
+const multer = require('multer')
+
+
+// const storageMulter = require("../../helpers/storageMulter");
+// const upload = multer({ storage: storageMulter() })
+const upload = multer() // Sử dụng bộ nhớ tạm thời
+const uploadCloud = require("../../middlewares/admin/uploadCloud.middleware")
+const controller = require("../../controllers/admin/my-account.controller");
+
 // Set up multer for file uploads (if needed)
-const upload = multer({ dest: 'uploads/' }); // You can customize the destination and other options
 // Create router
 const router = express.Router();
     router.get("/", controller.index);
     router.get("/edit", controller.edit);
-    router.patch("/edit", controller.editPatch);
+    router.patch("/edit",
+        upload.single('avatar'),
+        uploadCloud.uploadToCloud,
+        // Use multer middleware if handling file uploads
+        controller.editPatch);
 // Export router
 module.exports = router;
+

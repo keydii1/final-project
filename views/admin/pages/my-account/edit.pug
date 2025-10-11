@@ -9,6 +9,7 @@ block main
     form(
         action=`${prefixAdmin}/my-account/edit?_method=PATCH`
         method="POST"
+        enctype="multipart/form-data"
         )
         .card.mb-4
             .card-body
@@ -19,6 +20,15 @@ block main
                         name="fullname" 
                         required
                         value=account.fullname
+                    )
+                .form-group
+                    label(for="avatar") Ảnh đại diện
+                    if account.avatar
+                        img(src=account.avatar alt="Avatar" style="max-width: 150px; border-radius: 8px; display: block; margin-bottom: 10px;")
+                    input#avatar.form-control(
+                        type="file" 
+                        name="avatar" 
+                        accept="image/*"
                     )
                 .form-group
                     label(for="email") Email *
